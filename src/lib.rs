@@ -58,8 +58,7 @@ where
 {
     type Output = Result<Matrix<T, Z, Y>>;
 
-    fn mul(self, rhs: Matrix<T, Z, W>) -> Self::Output {
-        // Om, this isn't finished, don't judge. me no good at maths
+    fn mul(self, rhs: Matrix<T, Z, W>) -> Result<Matrix<T, Z, Y>> {
         if self.x_len != rhs.y_len {
             return Err(Error::NotEq(format!(
                 "Number of columns in the left hand matrix ({}) should be equal to the \
