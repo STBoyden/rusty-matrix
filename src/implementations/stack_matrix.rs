@@ -1,6 +1,7 @@
 use crate::{
     common::Numerical,
     error::{Error, Result},
+    implementations::HeapMatrix,
     matrix::Matrix,
 };
 use std::{fmt::Debug, ops::*};
@@ -32,7 +33,31 @@ where
             .map(|(index, x)| x + rhs.data[index])
             .collect();
 
-        StackMatrix::new_from_vec(&data).unwrap()
+        Self::new_from_vec(&data).unwrap()
+    }
+}
+
+impl<T: Numerical, const X: usize, const Y: usize> Add<HeapMatrix<T>>
+    for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<HeapMatrix<T>>;
+
+    fn add(self, rhs: HeapMatrix<T>) -> Self::Output {
+        if self.x_len != rhs.x_len || self.y_len != rhs.y_len {
+            return Err(Error::NotEq);
+        }
+
+        let data: Vec<T> = self
+            .data
+            .iter()
+            .cloned()
+            .enumerate()
+            .map(|(index, x)| x + rhs.data[index])
+            .collect();
+
+        Ok(HeapMatrix::new(&data, self.x_len, self.y_len))
     }
 }
 
@@ -51,7 +76,31 @@ where
             .map(|(index, x)| x - rhs.data[index])
             .collect();
 
-        StackMatrix::new_from_vec(&data).unwrap()
+        Self::new_from_vec(&data).unwrap()
+    }
+}
+
+impl<T: Numerical, const X: usize, const Y: usize> Sub<HeapMatrix<T>>
+    for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<HeapMatrix<T>>;
+
+    fn sub(self, rhs: HeapMatrix<T>) -> Self::Output {
+        if self.x_len != rhs.x_len || self.y_len != rhs.y_len {
+            return Err(Error::NotEq);
+        }
+
+        let data: Vec<T> = self
+            .data
+            .iter()
+            .cloned()
+            .enumerate()
+            .map(|(index, x)| x - rhs.data[index])
+            .collect();
+
+        Ok(HeapMatrix::new(&data, X, Y))
     }
 }
 
@@ -66,11 +115,7 @@ where
 
     fn mul(self, rhs: StackMatrix<T, Z, W>) -> Self::Output {
         if self.x_len != rhs.y_len {
-            return Err(Error::NotEq(format!(
-                "Number of columns in the left hand matrix ({}) should be equal to the \
-                 amount of rows in the right hand matrix ({})",
-                self.x_len, rhs.y_len
-            )));
+            return Err(Error::NotEq);
         }
 
         let mut data = [[T::default(); Z]; Y];
@@ -95,6 +140,46 @@ where
             .last();
 
         Ok(StackMatrix::new(data))
+    }
+}
+
+impl<T: Numerical, const X: usize, const Y: usize> Mul<HeapMatrix<T>>
+    for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<HeapMatrix<T>>;
+
+    fn mul(self, rhs: HeapMatrix<T>) -> Self::Output {
+        if self.x_len != rhs.y_len {
+            return Err(Error::NotEq);
+        }
+
+        let mut data = Vec::new();
+        let mut data_inner = Vec::new();
+        data_inner.resize(rhs.x_len, T::default());
+        data.resize(self.y_len, data_inner);
+
+        data.iter_mut()
+            .enumerate()
+            .map(|(row_index, y)| {
+                y.iter_mut()
+                    .enumerate()
+                    .map(|(column_index, x)| {
+                        *x = {
+                            let mut cell = T::default();
+                            for i in 0..rhs.y_len {
+                                cell += self.get_at_unchecked(row_index, i)
+                                    * rhs.get_at_unchecked(i, column_index);
+                            }
+                            cell
+                        }
+                    })
+                    .last();
+            })
+            .last();
+
+        Ok(HeapMatrix::new_2d(data))
     }
 }
 

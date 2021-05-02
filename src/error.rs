@@ -1,9 +1,8 @@
 #[derive(Debug, PartialEq)]
 /// rusty-matrix specific Error enum.
 pub enum Error {
-    /// NotEq: Two Matrices were expected to be equal in one way or another,
-    /// custom message specified within the String type.
-    NotEq(String),
+    /// NotEq: Two Matrices were expected to be equal in one way or another.
+    NotEq,
     /// OutOfRange: Returned when attempting to index the Matrix with an
     /// out-of-range x and y coordinates.
     OutOfRange,
