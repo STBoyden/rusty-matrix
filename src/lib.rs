@@ -4,7 +4,7 @@
     dead_code,
     clippy::suspicious_arithmetic_impl
 )]
-#![feature(const_generics, const_evaluatable_checked, trait_alias)]
+#![feature(const_fn, const_generics, const_evaluatable_checked, trait_alias)]
 
 mod common;
 mod error;

@@ -206,7 +206,7 @@ where
 
     /// Takes a trivially copyable 1-dimensional array which is used by the
     /// Matrix's inner data.
-    pub fn new_1d(data: [T; X * Y]) -> Self {
+    pub const fn new_1d(data: [T; X * Y]) -> Self {
         Self {
             data,
             x_len: X,
