@@ -1,7 +1,7 @@
-use crate::{common::Numerical, error::*};
+use crate::{common::Numeric, error::*};
 use std::ops::*;
 
-pub trait Matrix<T: Numerical>: Sized + Add + Sub + Mul {
+pub trait Matrix<T: Numeric>: Sized + Add + Sub + Mul {
     /// Gets the Matrix's inner data as a &[T]
     fn get_data(&self) -> &[T];
     /// Gets the Matrix's x length

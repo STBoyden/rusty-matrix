@@ -1,5 +1,5 @@
 use crate::{
-    common::Numerical,
+    common::Numeric,
     error::{Error, Result},
     implementations::HeapMatrix,
     matrix::Matrix,
@@ -9,7 +9,7 @@ use std::{fmt::Debug, ops::*};
 #[derive(Debug, Copy, Clone, PartialEq)]
 /// An implementation of the Matrix trait where the inner data is allocated on
 /// the stack.
-pub struct StackMatrix<T: Numerical, const X: usize, const Y: usize>
+pub struct StackMatrix<T: Numeric, const X: usize, const Y: usize>
 where
     [T; X * Y]: Sized,
 {
@@ -18,7 +18,7 @@ where
     pub y_len: usize,
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Add for StackMatrix<T, X, Y>
+impl<T: Numeric, const X: usize, const Y: usize> Add for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
 {
@@ -37,7 +37,7 @@ where
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Add<HeapMatrix<T>>
+impl<T: Numeric, const X: usize, const Y: usize> Add<HeapMatrix<T>>
     for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
@@ -61,7 +61,7 @@ where
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Sub for StackMatrix<T, X, Y>
+impl<T: Numeric, const X: usize, const Y: usize> Sub for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
 {
@@ -80,7 +80,7 @@ where
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Sub<HeapMatrix<T>>
+impl<T: Numeric, const X: usize, const Y: usize> Sub<HeapMatrix<T>>
     for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
@@ -104,7 +104,7 @@ where
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize, const Z: usize, const W: usize>
+impl<T: Numeric, const X: usize, const Y: usize, const Z: usize, const W: usize>
     Mul<StackMatrix<T, Z, W>> for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
@@ -143,7 +143,7 @@ where
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Mul<HeapMatrix<T>>
+impl<T: Numeric, const X: usize, const Y: usize> Mul<HeapMatrix<T>>
     for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
@@ -183,7 +183,7 @@ where
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> StackMatrix<T, X, Y>
+impl<T: Numeric, const X: usize, const Y: usize> StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
 {
@@ -237,7 +237,7 @@ where
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Matrix<T> for StackMatrix<T, X, Y>
+impl<T: Numeric, const X: usize, const Y: usize> Matrix<T> for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
 {

@@ -1,5 +1,5 @@
 use crate::{
-    common::Numerical,
+    common::Numeric,
     error::{Error, Result},
     implementations::StackMatrix,
     matrix::Matrix,
@@ -9,13 +9,13 @@ use std::{fmt::Debug, ops::*};
 #[derive(Debug, Clone, PartialEq)]
 /// An implementation of the Matrix trait where the inner data is allocated on
 /// the heap.
-pub struct HeapMatrix<T: Numerical> {
+pub struct HeapMatrix<T: Numeric> {
     pub data: Vec<T>,
     pub x_len: usize,
     pub y_len: usize,
 }
 
-impl<T: Numerical> Add for HeapMatrix<T> {
+impl<T: Numeric> Add for HeapMatrix<T> {
     type Output = Result<Self>;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -35,7 +35,7 @@ impl<T: Numerical> Add for HeapMatrix<T> {
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Add<StackMatrix<T, X, Y>>
+impl<T: Numeric, const X: usize, const Y: usize> Add<StackMatrix<T, X, Y>>
     for HeapMatrix<T>
 where
     [T; X * Y]: Sized,
@@ -59,7 +59,7 @@ where
     }
 }
 
-impl<T: Numerical> Sub for HeapMatrix<T> {
+impl<T: Numeric> Sub for HeapMatrix<T> {
     type Output = Result<Self>;
 
     fn sub(self, rhs: Self) -> Self::Output {
@@ -79,7 +79,7 @@ impl<T: Numerical> Sub for HeapMatrix<T> {
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Sub<StackMatrix<T, X, Y>>
+impl<T: Numeric, const X: usize, const Y: usize> Sub<StackMatrix<T, X, Y>>
     for HeapMatrix<T>
 where
     [T; X * Y]: Sized,
@@ -103,7 +103,7 @@ where
     }
 }
 
-impl<T: Numerical> Mul for HeapMatrix<T> {
+impl<T: Numeric> Mul for HeapMatrix<T> {
     type Output = Result<HeapMatrix<T>>;
 
     fn mul(self, rhs: Self) -> Self::Output {
@@ -139,7 +139,7 @@ impl<T: Numerical> Mul for HeapMatrix<T> {
     }
 }
 
-impl<T: Numerical, const X: usize, const Y: usize> Mul<StackMatrix<T, X, Y>>
+impl<T: Numeric, const X: usize, const Y: usize> Mul<StackMatrix<T, X, Y>>
     for HeapMatrix<T>
 where
     [T; X * Y]: Sized,
@@ -179,7 +179,7 @@ where
     }
 }
 
-impl<T: Numerical> HeapMatrix<T> {
+impl<T: Numeric> HeapMatrix<T> {
     /// Takes a &[T] which is converted to a 1-dimensional Vec<T> which is used
     /// by the HeapMatrix's inner data.
     pub fn new(data: &[T], columns: usize, rows: usize) -> Self {
@@ -266,7 +266,7 @@ impl<T: Numerical> HeapMatrix<T> {
     }
 }
 
-impl<T: Numerical> Matrix<T> for HeapMatrix<T> {
+impl<T: Numeric> Matrix<T> for HeapMatrix<T> {
     fn get_data(&self) -> &[T] { &self.data }
     fn get_x_len(&self) -> usize { self.x_len }
     fn get_y_len(&self) -> usize { self.y_len }

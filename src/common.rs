@@ -1,6 +1,9 @@
-use std::{fmt::Debug, ops::*};
+use std::{
+    fmt::{Debug, Display},
+    ops::*,
+};
 
-pub trait Numerical = Add<Output = Self>
+pub trait Numeric = Add<Output = Self>
     + Sub<Output = Self>
     + Mul<Output = Self>
     + Div<Output = Self>
@@ -12,4 +15,5 @@ pub trait Numerical = Add<Output = Self>
     + Sized
     + Copy
     + Debug
+    + Display
     + Default;
