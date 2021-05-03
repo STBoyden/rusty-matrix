@@ -4,7 +4,10 @@ use crate::{
     implementations::HeapMatrix,
     matrix::Matrix,
 };
-use std::{fmt::Debug, ops::*};
+use std::{
+    fmt::{Debug, Display, Formatter},
+    ops::*,
+};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 /// An implementation of the Matrix trait where the inner data is allocated on
@@ -234,6 +237,15 @@ where
             x_len: X,
             y_len: Y,
         })
+    }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Display for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_printable())
     }
 }
 

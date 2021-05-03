@@ -4,7 +4,10 @@ use crate::{
     implementations::StackMatrix,
     matrix::Matrix,
 };
-use std::{fmt::Debug, ops::*};
+use std::{
+    fmt::{Debug, Display, Formatter},
+    ops::*,
+};
 
 #[derive(Debug, Clone, PartialEq)]
 /// An implementation of the Matrix trait where the inner data is allocated on
@@ -254,8 +257,13 @@ impl<T: Numeric> HeapMatrix<T> {
         }
 
         self.y_len += 1;
-
         Ok(())
+    }
+}
+
+impl<T: Numeric> Display for HeapMatrix<T> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_printable())
     }
 }
 

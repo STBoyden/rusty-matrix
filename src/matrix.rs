@@ -33,4 +33,16 @@ pub trait Matrix<T: Numeric>: Sized + Add + Sub + Mul {
         &self.get_data()[row_index % self.get_x_len()
             ..(row_index % self.get_x_len()) + self.get_x_len()]
     }
+
+    fn to_printable(&self) -> String {
+        let mut out = String::new();
+        for y in 0..self.get_y_len() {
+            for x in 0..self.get_x_len() {
+                out += &format!("{}\t", self.get_at_unchecked(x, y));
+            }
+            out += "\n";
+        }
+
+        out
+    }
 }
