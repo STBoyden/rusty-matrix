@@ -9,7 +9,8 @@ pub trait Matrix<T: Numeric>: Sized + Add + Sub + Mul {
     /// Gets the Matrix's y length;
     fn get_y_len(&self) -> usize;
 
-    /// Takes x and y coordinates and returns a Result<T>.
+    /// Takes x and y coordinates and returns a T if the coordinates are within
+    /// the bounds of the Matrix, panics otherwise.
     fn get_at_unchecked(&self, x: usize, y: usize) -> T {
         *self
             .get_data()
@@ -17,8 +18,7 @@ pub trait Matrix<T: Numeric>: Sized + Add + Sub + Mul {
             .unwrap_or_else(|| panic!("Index ({}, {}) is out of range", x, y))
     }
 
-    /// Takes x and y coordinates and returns a T if the coordinates are within
-    /// the bounds of the Matrix, panics otherwise.
+    /// Takes x and y coordinates and returns a Result<T>.
     fn get_at(&self, x: usize, y: usize) -> Result<T> {
         if let Some(coord_data) = self.get_data().get(y * self.get_x_len() + x) {
             Ok(*coord_data)
