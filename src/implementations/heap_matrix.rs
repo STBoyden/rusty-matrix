@@ -250,14 +250,7 @@ impl<T: Numeric> HeapMatrix<T> {
         self.data.resize(self.data.len() + X, T::default());
 
         for (column_index, x) in row.iter().enumerate() {
-            let mut index =
-                column_index + (self.x_len % self.y_len) + (self.x_len * self.y_len);
-
-            if index == self.data.len() {
-                index -= 1
-            }
-
-            self.data[index] = *x;
+            self.data[self.x_len * self.y_len + column_index] = *x;
         }
 
         self.y_len += 1;
