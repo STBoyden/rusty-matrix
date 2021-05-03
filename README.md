@@ -20,4 +20,4 @@ stack_mat * heap_mat // Is equal to:
                      //  ]))
 ```
 
-This repository is mirrored on [GitHub](https://github.com/STBoyden/rusty-matrix).
+The [GitHub](https://github.com/STBoyden/rusty-matrix) repository is a mirror of my [self-hosted Gitea instance](https://git.stboyden.com/STBoyden/rusty-matrix).
