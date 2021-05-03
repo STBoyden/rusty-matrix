@@ -11,7 +11,8 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - uses: spyoungtech/mirror-action@master
+            - name: mirror-repository
               with: 
-                    REMOTE: https://git.stboyden.com/rusty-matrix
+                    REMOTE: https://git.stboyden.com/STBoyden/rusty-matrix
                     GIT_USERNAME: STBoyden
                     GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
