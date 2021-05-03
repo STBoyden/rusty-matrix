@@ -10,9 +10,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
-            - name: mirror-repository
             - uses: spyoungtech/mirror-action@master
-            with:
-                REMOTE: https://git.stboyden.com/rusty-matrix
-                GIT_USERNAME: STBoyden
-                GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+              with: 
+                    REMOTE: https://git.stboyden.com/rusty-matrix
+                    GIT_USERNAME: STBoyden
+                    GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
