@@ -19,3 +19,5 @@ stack_mat * heap_mat // Is equal to:
                      //      [29, 40, 51]
                      //  ]))
 ```
+
+This repository is mirrored on [GitHub](https://github.com/STBoyden/rusty-matrix).
