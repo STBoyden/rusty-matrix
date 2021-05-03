@@ -129,8 +129,8 @@ where
                         *x = {
                             let mut cell = T::default();
                             for i in 0..rhs.y_len {
-                                cell += self.get_at_unchecked(row_index, i)
-                                    * rhs.get_at_unchecked(i, column_index);
+                                cell += self.get_at_unchecked(i, row_index)
+                                    * rhs.get_at_unchecked(column_index, i);
                             }
                             cell
                         }
@@ -169,8 +169,8 @@ where
                         *x = {
                             let mut cell = T::default();
                             for i in 0..rhs.y_len {
-                                cell += self.get_at_unchecked(row_index, i)
-                                    * rhs.get_at_unchecked(i, column_index);
+                                cell += self.get_at_unchecked(i, row_index)
+                                    * rhs.get_at_unchecked(column_index, i);
                             }
                             cell
                         }

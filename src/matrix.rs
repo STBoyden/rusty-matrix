@@ -13,14 +13,14 @@ pub trait Matrix<T: Numeric>: Sized + Add + Sub + Mul {
     fn get_at_unchecked(&self, x: usize, y: usize) -> T {
         *self
             .get_data()
-            .get(x * self.get_x_len() + y)
+            .get(y * self.get_x_len() + x)
             .unwrap_or_else(|| panic!("Index ({}, {}) is out of range", x, y))
     }
 
     /// Takes x and y coordinates and returns a T if the coordinates are within
     /// the bounds of the Matrix, panics otherwise.
     fn get_at(&self, x: usize, y: usize) -> Result<T> {
-        if let Some(coord_data) = self.get_data().get(x * self.get_x_len() + y) {
+        if let Some(coord_data) = self.get_data().get(y * self.get_x_len() + x) {
             Ok(*coord_data)
         } else {
             Err(Error::OutOfRange)

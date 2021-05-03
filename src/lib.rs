@@ -20,7 +20,7 @@ mod tests {
     fn stack_index_check() {
         let mat1 = StackMatrix::new([[100, 200], [300, 400]]);
 
-        assert_eq!(mat1.get_at_unchecked(1, 0), 300);
+        assert_eq!(mat1.get_at_unchecked(0, 1), 300);
     }
 
     #[test]
@@ -57,7 +57,7 @@ mod tests {
     fn heap_index_check() {
         let mat1 = HeapMatrix::new_owned_2d([[100, 200], [300, 400]]);
 
-        assert_eq!(mat1.get_at_unchecked(1, 0), 300);
+        assert_eq!(mat1.get_at_unchecked(0, 1), 300);
     }
 
     #[test]
