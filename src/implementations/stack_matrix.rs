@@ -240,6 +240,20 @@ where
     }
 }
 
+impl<T: Numeric, const X: usize, const Y: usize> PartialEq<HeapMatrix<T>>
+    for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    fn eq(&self, other: &HeapMatrix<T>) -> bool {
+        if X != other.x_len || Y != other.y_len {
+            return false;
+        }
+
+        (&other.data) == &self.data
+    }
+}
+
 impl<T: Numeric, const X: usize, const Y: usize> Display for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,

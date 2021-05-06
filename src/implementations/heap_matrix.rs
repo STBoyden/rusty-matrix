@@ -261,6 +261,20 @@ impl<T: Numeric> HeapMatrix<T> {
     }
 }
 
+impl<T: Numeric, const X: usize, const Y: usize> PartialEq<StackMatrix<T, X, Y>>
+    for HeapMatrix<T>
+where
+    [T; X * Y]: Sized,
+{
+    fn eq(&self, other: &StackMatrix<T, X, Y>) -> bool {
+        if self.x_len != X || self.y_len != Y {
+            return false;
+        }
+
+        (&self.data) == &other.data
+    }
+}
+
 impl<T: Numeric> Display for HeapMatrix<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.to_printable())

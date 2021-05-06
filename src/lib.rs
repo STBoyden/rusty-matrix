@@ -197,4 +197,15 @@ mod tests {
         heap_mat.insert_row([7; 3]).unwrap();
         assert_eq!(stack_mat * heap_mat, Err(Error::NotEq));
     }
+
+    #[test]
+    fn heap_stack_eq_check() {
+        let stack_mat = StackMatrix::new([[1, 2], [3, 4]]);
+        let mut heap_mat = HeapMatrix::new_owned_2d([[1, 2], [3, 4]]);
+
+        assert_eq!(stack_mat, heap_mat);
+
+        heap_mat.insert_row([5, 6]).unwrap();
+        assert_ne!(stack_mat, heap_mat);
+    }
 }
