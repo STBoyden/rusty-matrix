@@ -42,8 +42,8 @@ where
         }
     }
 
-    /// Takes a y index to get the corresponding row of the 1-dimensional inner
-    /// array interpreted as a 2-dimensional array.
+    /// Takes a y index to get a reference to the corresponding "row" of the
+    /// inner matrix data.
     fn get_row_at(&self, row_index: usize) -> &[T] {
         &self.get_data()[row_index % self.get_x_len()
             ..(row_index % self.get_x_len()) + self.get_x_len()]
