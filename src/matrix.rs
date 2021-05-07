@@ -34,6 +34,7 @@ pub trait Matrix<T: Numeric>: Sized + Add + Sub + Mul {
             ..(row_index % self.get_x_len()) + self.get_x_len()]
     }
 
+    /// Formats the Matrix in a way that is easily printable.
     fn to_printable(&self) -> String {
         let mut out = String::new();
         for y in 0..self.get_y_len() {
