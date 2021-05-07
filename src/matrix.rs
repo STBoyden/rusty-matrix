@@ -49,6 +49,14 @@ where
             ..(row_index % self.get_x_len()) + self.get_x_len()]
     }
 
+    /// Takes a y index to get a mutable reference to the corresponding "row" of
+    /// the inner matrix data
+    fn get_row_at_mut(&mut self, row_index: usize) -> &mut [T] {
+        let x_length = self.get_x_len();
+
+        &mut self.get_data_mut()[row_index % x_length..(row_index % x_length) + x_length]
+    }
+
     /// Formats the Matrix in a way that is easily printable.
     fn to_printable(&self) -> String {
         let mut out = String::new();
