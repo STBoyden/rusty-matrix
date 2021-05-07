@@ -31,9 +31,8 @@ where
         let data: Vec<T> = self
             .data
             .iter()
-            .cloned()
             .enumerate()
-            .map(|(index, x)| x + rhs.data[index])
+            .map(|(index, x)| *x + rhs.data[index])
             .collect();
 
         Self::new_from_vec(&data).unwrap()
@@ -55,9 +54,8 @@ where
         let data: Vec<T> = self
             .data
             .iter()
-            .cloned()
             .enumerate()
-            .map(|(index, x)| x + rhs.data[index])
+            .map(|(index, x)| *x + rhs.data[index])
             .collect();
 
         Ok(HeapMatrix::new(&data, self.x_len, self.y_len))
@@ -74,9 +72,8 @@ where
         let data: Vec<T> = self
             .data
             .iter()
-            .cloned()
             .enumerate()
-            .map(|(index, x)| x - rhs.data[index])
+            .map(|(index, x)| *x - rhs.data[index])
             .collect();
 
         Self::new_from_vec(&data).unwrap()
@@ -98,9 +95,8 @@ where
         let data: Vec<T> = self
             .data
             .iter()
-            .cloned()
             .enumerate()
-            .map(|(index, x)| x - rhs.data[index])
+            .map(|(index, x)| *x - rhs.data[index])
             .collect();
 
         Ok(HeapMatrix::new(&data, X, Y))
