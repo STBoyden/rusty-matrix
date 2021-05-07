@@ -21,7 +21,7 @@ where
     fn last(&self) -> Option<&T> { self.get_data().last() }
     /// Gets the first item of the inner matrix data as a mutable reference
     fn first_mut(&mut self) -> Option<&mut T> { self.get_data_mut().first_mut() }
-    /// Gets the last item of the inner matrix data as a matrix reference
+    /// Gets the last item of the inner matrix data as a mutable reference
     fn last_mut(&mut self) -> Option<&mut T> { self.get_data_mut().last_mut() }
 
     /// Takes x and y coordinates and returns a T if the coordinates are within
