@@ -246,7 +246,7 @@ where
             return false;
         }
 
-        (&other.data) == &self.data
+        other.data == self.data
     }
 }
 

@@ -297,7 +297,7 @@ where
             return false;
         }
 
-        (&self.data) == &other.data
+        self.data == other.data
     }
 }
 
