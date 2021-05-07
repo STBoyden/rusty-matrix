@@ -13,9 +13,9 @@ use std::{
 /// An implementation of the Matrix trait where the inner data is allocated on
 /// the heap.
 pub struct HeapMatrix<T: Numeric> {
-    pub data: Vec<T>,
-    pub x_len: usize,
-    pub y_len: usize,
+    pub(crate) data: Vec<T>,
+    pub(crate) x_len: usize,
+    pub(crate) y_len: usize,
 }
 
 impl<T: Numeric> Add for HeapMatrix<T> {

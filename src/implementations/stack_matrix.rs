@@ -16,9 +16,9 @@ pub struct StackMatrix<T: Numeric, const X: usize, const Y: usize>
 where
     [T; X * Y]: Sized,
 {
-    pub data: [T; X * Y],
-    pub x_len: usize,
-    pub y_len: usize,
+    pub(crate) data: [T; X * Y],
+    pub(crate) x_len: usize,
+    pub(crate) y_len: usize,
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Add for StackMatrix<T, X, Y>
