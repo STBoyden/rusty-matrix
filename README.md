@@ -20,4 +20,6 @@ stack_mat * heap_mat // Is equal to:
                      //  ]))
 ```
 
+This crate requires a nightly version of Rust >= 1.53.
+
 The [GitHub](https://github.com/STBoyden/rusty-matrix) repository is a mirror of my [self-hosted Gitea instance](https://git.stboyden.com/STBoyden/rusty-matrix).
