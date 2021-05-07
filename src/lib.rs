@@ -183,11 +183,11 @@ mod tests {
 
         assert_eq!(
             stack_mat + heap_mat.clone(),
-            Ok(HeapMatrix::new_owned_2d([[2, 4], [6, 8]]))
+            Ok(StackMatrix::new([[2, 4], [6, 8]]))
         );
         assert_ne!(
             stack_mat + heap_mat,
-            Ok(HeapMatrix::new_owned_2d([[10, 10], [10, 10]]))
+            Ok(StackMatrix::new([[10, 10], [10, 10]]))
         );
     }
 
@@ -204,10 +204,7 @@ mod tests {
         let stack_mat = StackMatrix::new([[100; 3]; 3]);
         let heap_mat = HeapMatrix::new_owned_2d([[25; 3]; 3]);
 
-        assert_eq!(
-            stack_mat - heap_mat,
-            Ok(HeapMatrix::new_owned_2d([[75; 3]; 3]))
-        );
+        assert_eq!(stack_mat - heap_mat, Ok(StackMatrix::new([[75; 3]; 3])));
     }
 
     #[bench]
@@ -248,7 +245,7 @@ mod tests {
 
         assert_eq!(
             stack_mat + heap_mat.clone(),
-            Ok(HeapMatrix::new_owned_2d([[2, 4], [6, 8]]))
+            Ok(StackMatrix::new([[2, 4], [6, 8]]))
         );
 
         heap_mat.insert_row([5, 6]).unwrap();
@@ -262,7 +259,7 @@ mod tests {
 
         assert_eq!(
             stack_mat - heap_mat.clone(),
-            Ok(HeapMatrix::new_owned_2d([[75; 3]; 3]))
+            Ok(StackMatrix::new([[75; 3]; 3]))
         );
 
         heap_mat.insert_row([25; 3]).unwrap();

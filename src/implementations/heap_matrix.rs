@@ -21,20 +21,7 @@ pub struct HeapMatrix<T: Numeric> {
 impl<T: Numeric> Add for HeapMatrix<T> {
     type Output = Result<Self>;
 
-    fn add(self, rhs: Self) -> Self::Output {
-        if self.x_len != rhs.x_len || self.y_len != rhs.y_len {
-            return Err(Error::NotEq);
-        }
-
-        let data: Vec<T> = self
-            .data
-            .iter()
-            .enumerate()
-            .map(|(index, x)| *x + rhs.data[index])
-            .collect();
-
-        Ok(Self::new(&data, self.x_len, self.y_len))
-    }
+    fn add(self, rhs: Self) -> Self::Output { self.mat_add(rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Add<StackMatrix<T, X, Y>>
@@ -44,26 +31,13 @@ where
 {
     type Output = Result<Self>;
 
-    fn add(self, rhs: StackMatrix<T, X, Y>) -> Self::Output {
-        if self.x_len != rhs.x_len || self.y_len != rhs.y_len {
-            return Err(Error::NotEq);
-        }
-
-        let data: Vec<T> = self
-            .data
-            .iter()
-            .enumerate()
-            .map(|(index, x)| *x + rhs.data[index])
-            .collect();
-
-        Ok(Self::new(&data, self.x_len, self.y_len))
-    }
+    fn add(self, rhs: StackMatrix<T, X, Y>) -> Self::Output { self.mat_add(rhs) }
 }
 
 impl<'a, T: Numeric> Add<&Self> for HeapMatrix<T> {
     type Output = Result<Self>;
 
-    fn add(self, rhs: &Self) -> Self::Output { self + rhs.clone() }
+    fn add(self, rhs: &Self) -> Self::Output { self.mat_add(rhs.clone()) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Add<&StackMatrix<T, X, Y>>
@@ -73,26 +47,13 @@ where
 {
     type Output = Result<Self>;
 
-    fn add(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self - *rhs }
+    fn add(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self.mat_add(*rhs) }
 }
 
 impl<T: Numeric> Sub for HeapMatrix<T> {
     type Output = Result<Self>;
 
-    fn sub(self, rhs: Self) -> Self::Output {
-        if self.x_len != rhs.x_len || self.y_len != rhs.y_len {
-            return Err(Error::NotEq);
-        }
-
-        let data: Vec<T> = self
-            .data
-            .iter()
-            .enumerate()
-            .map(|(index, x)| *x - rhs.data[index])
-            .collect();
-
-        Ok(Self::new(&data, self.x_len, self.y_len))
-    }
+    fn sub(self, rhs: Self) -> Self::Output { self.mat_sub(rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Sub<StackMatrix<T, X, Y>>
@@ -102,26 +63,13 @@ where
 {
     type Output = Result<Self>;
 
-    fn sub(self, rhs: StackMatrix<T, X, Y>) -> Self::Output {
-        if self.x_len != rhs.x_len || self.y_len != rhs.y_len {
-            return Err(Error::NotEq);
-        }
-
-        let data: Vec<T> = self
-            .data
-            .iter()
-            .enumerate()
-            .map(|(index, x)| *x - rhs.data[index])
-            .collect();
-
-        Ok(Self::new(&data, self.x_len, self.y_len))
-    }
+    fn sub(self, rhs: StackMatrix<T, X, Y>) -> Self::Output { self.mat_sub(rhs) }
 }
 
 impl<T: Numeric> Sub<&Self> for HeapMatrix<T> {
     type Output = Result<Self>;
 
-    fn sub(self, rhs: &Self) -> Self::Output { self - rhs.clone() }
+    fn sub(self, rhs: &Self) -> Self::Output { self.mat_sub(rhs.clone()) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Sub<&StackMatrix<T, X, Y>>
@@ -131,43 +79,13 @@ where
 {
     type Output = Result<Self>;
 
-    fn sub(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self - *rhs }
+    fn sub(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self.mat_sub(*rhs) }
 }
 
 impl<T: Numeric> Mul for HeapMatrix<T> {
     type Output = Result<HeapMatrix<T>>;
 
-    fn mul(self, rhs: Self) -> Self::Output {
-        if self.x_len != rhs.y_len {
-            return Err(Error::NotEq);
-        }
-
-        let mut data = Vec::new();
-        let mut data_inner = Vec::new();
-        data_inner.resize(rhs.x_len, T::default());
-        data.resize(self.y_len, data_inner);
-
-        data.iter_mut()
-            .enumerate()
-            .map(|(row_index, y)| {
-                y.iter_mut()
-                    .enumerate()
-                    .map(|(column_index, x)| {
-                        *x = {
-                            let mut cell = T::default();
-                            for i in 0..rhs.y_len {
-                                cell += self.get_at_unchecked(i, row_index)
-                                    * rhs.get_at_unchecked(column_index, i);
-                            }
-                            cell
-                        }
-                    })
-                    .last();
-            })
-            .last();
-
-        Ok(Self::new_2d(data))
-    }
+    fn mul(self, rhs: Self) -> Self::Output { self.mat_mul(rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Mul<StackMatrix<T, X, Y>>
@@ -177,43 +95,13 @@ where
 {
     type Output = Result<HeapMatrix<T>>;
 
-    fn mul(self, rhs: StackMatrix<T, X, Y>) -> Self::Output {
-        if self.x_len != rhs.y_len {
-            return Err(Error::NotEq);
-        }
-
-        let mut data = Vec::new();
-        let mut data_inner = Vec::new();
-        data_inner.resize(rhs.x_len, T::default());
-        data.resize(self.y_len, data_inner);
-
-        data.iter_mut()
-            .enumerate()
-            .map(|(row_index, y)| {
-                y.iter_mut()
-                    .enumerate()
-                    .map(|(column_index, x)| {
-                        *x = {
-                            let mut cell = T::default();
-                            for i in 0..rhs.y_len {
-                                cell += self.get_at_unchecked(i, row_index)
-                                    * rhs.get_at_unchecked(column_index, i);
-                            }
-                            cell
-                        }
-                    })
-                    .last();
-            })
-            .last();
-
-        Ok(Self::new_2d(data))
-    }
+    fn mul(self, rhs: StackMatrix<T, X, Y>) -> Self::Output { self.mat_mul(rhs) }
 }
 
 impl<T: Numeric> Mul<&Self> for HeapMatrix<T> {
     type Output = Result<Self>;
 
-    fn mul(self, rhs: &Self) -> Self::Output { self * rhs.clone() }
+    fn mul(self, rhs: &Self) -> Self::Output { self.mat_mul(rhs.clone()) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Mul<&StackMatrix<T, X, Y>>
@@ -223,7 +111,7 @@ where
 {
     type Output = Result<Self>;
 
-    fn mul(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self * *rhs }
+    fn mul(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self.mat_mul(*rhs) }
 }
 
 impl<T: Numeric> Add<T> for HeapMatrix<T> {

@@ -76,4 +76,69 @@ where
 
         out
     }
+
+    fn mat_add<Other: Matrix<'a, T>>(self, rhs: Other) -> Result<Self> {
+        if self.get_x_len() != rhs.get_x_len() || self.get_y_len() != rhs.get_y_len() {
+            return Err(Error::NotEq);
+        }
+
+        let data: Vec<T> = self
+            .get_data()
+            .iter()
+            .enumerate()
+            .map(|(index, x)| *x + rhs.get_data()[index])
+            .collect();
+
+        Self::mat_new_1d(&data, self.get_x_len(), self.get_y_len())
+    }
+
+    fn mat_sub<Other: Matrix<'a, T>>(self, rhs: Other) -> Result<Self> {
+        if self.get_x_len() != rhs.get_x_len() || self.get_y_len() != rhs.get_y_len() {
+            return Err(Error::NotEq);
+        }
+
+        let data: Vec<T> = self
+            .get_data()
+            .iter()
+            .enumerate()
+            .map(|(index, x)| *x - rhs.get_data()[index])
+            .collect();
+
+        Self::mat_new_1d(&data, self.get_x_len(), self.get_y_len())
+    }
+
+    fn mat_mul<Other: Matrix<'a, T>, Res: Matrix<'a, T>>(
+        self,
+        rhs: Other,
+    ) -> Result<Res> {
+        if self.get_x_len() != rhs.get_y_len() {
+            return Err(Error::NotEq);
+        }
+
+        let mut data = Vec::new();
+        let mut data_inner = Vec::new();
+        data_inner.resize(rhs.get_x_len(), T::default());
+        data.resize(self.get_y_len(), data_inner);
+
+        data.iter_mut()
+            .enumerate()
+            .map(|(row_index, y)| {
+                y.iter_mut()
+                    .enumerate()
+                    .map(|(column_index, x)| {
+                        *x = {
+                            let mut cell = T::default();
+                            for i in 0..rhs.get_y_len() {
+                                cell += self.get_at_unchecked(i, row_index)
+                                    * rhs.get_at_unchecked(column_index, i);
+                            }
+                            cell
+                        }
+                    })
+                    .last();
+            })
+            .last();
+
+        Res::mat_new_vec(data)
+    }
 }
