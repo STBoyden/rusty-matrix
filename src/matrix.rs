@@ -15,6 +15,13 @@ where
     /// Gets the Matrix's y length
     fn get_y_len(&self) -> usize;
 
+    /// Creates a new Matrix<T> from the given 2d slice of data.
+    fn mat_new(data: &[&[T]]) -> Result<Self>;
+    /// Creates a new Matrix<T> from the given 1d slice of data.
+    fn mat_new_1d(data: &[T], columns: usize, rows: usize) -> Result<Self>;
+    /// Creates a new Matrix<T> from the given 2d Vec<T>.
+    fn mat_new_vec(data: Vec<Vec<T>>) -> Result<Self>;
+
     /// Gets the first item of the inner matrix data as a reference
     fn first(&self) -> Option<&T> { self.get_data().first() }
     /// Gets the last item of the inner matrix data as a reference

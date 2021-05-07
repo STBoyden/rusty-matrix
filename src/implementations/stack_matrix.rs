@@ -251,7 +251,7 @@ where
     fn add(self, rhs: T) -> Self::Output {
         let data: Vec<T> = self.data.iter().map(|x| *x + rhs).collect();
 
-        Self::new_from_vec(&data).unwrap()
+        Self::new_from_slice(&data).unwrap()
     }
 }
 
@@ -264,7 +264,7 @@ where
     fn sub(self, rhs: T) -> Self::Output {
         let data: Vec<T> = self.data.iter().map(|x| *x - rhs).collect();
 
-        Self::new_from_vec(&data).unwrap()
+        Self::new_from_slice(&data).unwrap()
     }
 }
 
@@ -277,7 +277,7 @@ where
     fn mul(self, rhs: T) -> Self::Output {
         let data: Vec<T> = self.data.iter().map(|x| *x * rhs).collect();
 
-        Self::new_from_vec(&data).unwrap()
+        Self::new_from_slice(&data).unwrap()
     }
 }
 
@@ -314,7 +314,7 @@ where
 
     /// Takes a &[T] which is converted to a 1-dimensional trivially
     /// copyable array which is used by the Matrix's inner data.
-    pub fn new_from_vec(data: &[T]) -> Result<Self> {
+    pub fn new_from_slice(data: &[T]) -> Result<Self> {
         if data.len() != X * Y {
             return Err(Error::IncorrectLength);
         }
@@ -367,4 +367,54 @@ where
     fn get_data_mut(&mut self) -> &mut [T] { &mut self.data }
     fn get_x_len(&self) -> usize { self.x_len }
     fn get_y_len(&self) -> usize { self.y_len }
+
+    fn mat_new(data: &[&[T]]) -> Result<Self> {
+        if data.len() != Y || data[0].len() != X {
+            return Err(Error::IncorrectLength);
+        }
+
+        let mut array: [[T; X]; Y] = [[T::default(); X]; Y];
+
+        array
+            .iter_mut()
+            .enumerate()
+            .map(|(y_index, y)| {
+                y.iter_mut()
+                    .enumerate()
+                    .map(|(x_index, x)| {
+                        *x = data[y_index][x_index];
+                    })
+                    .last()
+            })
+            .last();
+
+        Ok(Self::new(array))
+    }
+
+    fn mat_new_1d(data: &[T], _columns: usize, _rows: usize) -> Result<Self> {
+        Self::new_from_slice(data)
+    }
+
+    fn mat_new_vec(data: Vec<Vec<T>>) -> Result<Self> {
+        if data.len() != Y || data[0].len() != X {
+            return Err(Error::IncorrectLength);
+        }
+
+        let mut array: [[T; X]; Y] = [[T::default(); X]; Y];
+
+        array
+            .iter_mut()
+            .enumerate()
+            .map(|(y_index, y)| {
+                y.iter_mut()
+                    .enumerate()
+                    .map(|(x_index, x)| {
+                        *x = data[y_index][x_index];
+                    })
+                    .last()
+            })
+            .last();
+
+        Ok(Self::new(array))
+    }
 }

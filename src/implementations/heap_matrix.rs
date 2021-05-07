@@ -360,4 +360,16 @@ impl<'a, T: 'a + Numeric> Matrix<'a, T> for HeapMatrix<T> {
     fn get_data_mut(&mut self) -> &mut [T] { &mut self.data }
     fn get_x_len(&self) -> usize { self.x_len }
     fn get_y_len(&self) -> usize { self.y_len }
+
+    fn mat_new(data: &[&[T]]) -> Result<Self> {
+        let data: Vec<Vec<T>> = data.iter().map(|x| x.to_vec()).collect();
+
+        Ok(Self::new_2d(data))
+    }
+
+    fn mat_new_1d(data: &[T], columns: usize, rows: usize) -> Result<Self> {
+        Ok(Self::new(data, columns, rows))
+    }
+
+    fn mat_new_vec(data: Vec<Vec<T>>) -> Result<Self> { Ok(Self::new_2d(data)) }
 }
