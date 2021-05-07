@@ -10,7 +10,7 @@ where
     fn get_data(&self) -> &[T];
     /// Gets the Matrix's x length
     fn get_x_len(&self) -> usize;
-    /// Gets the Matrix's y length;
+    /// Gets the Matrix's y length
     fn get_y_len(&self) -> usize;
 
     /// Takes x and y coordinates and returns a T if the coordinates are within
