@@ -3,6 +3,8 @@ use std::ops::*;
 
 pub trait Matrix<'a, T: Numeric>:
     Sized + Add + Sub + Mul + Add<T> + Sub<T> + Mul<T> + PartialEq
+where
+    Self: 'a + Add<&'a Self> + Sub<&'a Self> + Mul<&'a Self>,
 {
     /// Gets the Matrix's inner data as a &[T]
     fn get_data(&self) -> &[T];

@@ -60,6 +60,22 @@ where
     }
 }
 
+impl<'a, T: Numeric> Add<&Self> for HeapMatrix<T> {
+    type Output = Result<Self>;
+
+    fn add(self, rhs: &Self) -> Self::Output { self + rhs.clone() }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Add<&StackMatrix<T, X, Y>>
+    for HeapMatrix<T>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<Self>;
+
+    fn add(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self - *rhs }
+}
+
 impl<T: Numeric> Sub for HeapMatrix<T> {
     type Output = Result<Self>;
 
@@ -100,6 +116,22 @@ where
 
         Ok(Self::new(&data, self.x_len, self.y_len))
     }
+}
+
+impl<T: Numeric> Sub<&Self> for HeapMatrix<T> {
+    type Output = Result<Self>;
+
+    fn sub(self, rhs: &Self) -> Self::Output { self - rhs.clone() }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Sub<&StackMatrix<T, X, Y>>
+    for HeapMatrix<T>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<Self>;
+
+    fn sub(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self - *rhs }
 }
 
 impl<T: Numeric> Mul for HeapMatrix<T> {
@@ -176,6 +208,22 @@ where
 
         Ok(Self::new_2d(data))
     }
+}
+
+impl<T: Numeric> Mul<&Self> for HeapMatrix<T> {
+    type Output = Result<Self>;
+
+    fn mul(self, rhs: &Self) -> Self::Output { self * rhs.clone() }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Mul<&StackMatrix<T, X, Y>>
+    for HeapMatrix<T>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<Self>;
+
+    fn mul(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self * *rhs }
 }
 
 impl<T: Numeric> Add<T> for HeapMatrix<T> {
@@ -307,7 +355,7 @@ impl<T: Numeric> Display for HeapMatrix<T> {
     }
 }
 
-impl<T: Numeric> Matrix<T> for HeapMatrix<T> {
+impl<'a, T: 'a + Numeric> Matrix<'a, T> for HeapMatrix<T> {
     fn get_data(&self) -> &[T] { &self.data }
     fn get_x_len(&self) -> usize { self.x_len }
     fn get_y_len(&self) -> usize { self.y_len }

@@ -62,6 +62,25 @@ where
     }
 }
 
+impl<T: Numeric, const X: usize, const Y: usize> Add<&Self> for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Self;
+
+    fn add(self, rhs: &Self) -> Self::Output { self + *rhs }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Add<&HeapMatrix<T>>
+    for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<HeapMatrix<T>>;
+
+    fn add(self, rhs: &HeapMatrix<T>) -> Self::Output { self + rhs.clone() }
+}
+
 impl<T: Numeric, const X: usize, const Y: usize> Sub for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
@@ -101,6 +120,25 @@ where
 
         Ok(HeapMatrix::new(&data, X, Y))
     }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Sub<&Self> for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Self;
+
+    fn sub(self, rhs: &Self) -> Self::Output { self - *rhs }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Sub<&HeapMatrix<T>>
+    for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<HeapMatrix<T>>;
+
+    fn sub(self, rhs: &HeapMatrix<T>) -> Self::Output { self - rhs.clone() }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize, const Z: usize, const W: usize>
@@ -182,6 +220,67 @@ where
     }
 }
 
+impl<T: Numeric, const X: usize, const Y: usize, const Z: usize, const W: usize>
+    Mul<&StackMatrix<T, Z, W>> for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+    [T; Z * W]: Sized,
+    [T; Z * Y]: Sized,
+{
+    type Output = Result<StackMatrix<T, Z, Y>>;
+
+    fn mul(self, rhs: &StackMatrix<T, Z, W>) -> Self::Output { self * *rhs }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Mul<&HeapMatrix<T>>
+    for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Result<HeapMatrix<T>>;
+
+    fn mul(self, rhs: &HeapMatrix<T>) -> Self::Output { self * rhs.clone() }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Add<T> for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Self;
+
+    fn add(self, rhs: T) -> Self::Output {
+        let data: Vec<T> = self.data.iter().map(|x| *x + rhs).collect();
+
+        Self::new_from_vec(&data).unwrap()
+    }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Sub<T> for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Self;
+
+    fn sub(self, rhs: T) -> Self::Output {
+        let data: Vec<T> = self.data.iter().map(|x| *x - rhs).collect();
+
+        Self::new_from_vec(&data).unwrap()
+    }
+}
+
+impl<T: Numeric, const X: usize, const Y: usize> Mul<T> for StackMatrix<T, X, Y>
+where
+    [T; X * Y]: Sized,
+{
+    type Output = Self;
+
+    fn mul(self, rhs: T) -> Self::Output {
+        let data: Vec<T> = self.data.iter().map(|x| *x * rhs).collect();
+
+        Self::new_from_vec(&data).unwrap()
+    }
+}
+
 impl<T: Numeric, const X: usize, const Y: usize> StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
@@ -259,7 +358,8 @@ where
     }
 }
 
-impl<T: Numeric, const X: usize, const Y: usize> Matrix<T> for StackMatrix<T, X, Y>
+impl<'a, T: 'a + Numeric, const X: usize, const Y: usize> Matrix<'a, T>
+    for StackMatrix<T, X, Y>
 where
     [T; X * Y]: Sized,
 {
