@@ -1,10 +1,17 @@
 #![allow(
     clippy::pedantic,
-    incomplete_features,
+    clippy::suspicious_arithmetic_impl,
     dead_code,
-    clippy::suspicious_arithmetic_impl
+    incomplete_features
 )]
-#![feature(const_fn, const_generics, const_evaluatable_checked, trait_alias, test)]
+#![feature(
+    const_evaluatable_checked,
+    const_fn,
+    const_fn_trait_bound,
+    const_generics,
+    test,
+    trait_alias
+)]
 
 extern crate test;
 
