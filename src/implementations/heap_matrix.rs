@@ -178,6 +178,36 @@ where
     }
 }
 
+impl<T: Numeric> Add<T> for HeapMatrix<T> {
+    type Output = Self;
+
+    fn add(self, rhs: T) -> Self::Output {
+        let data: Vec<T> = self.data.iter().map(|x| *x + rhs).collect();
+
+        Self::new(&data, self.x_len, self.y_len)
+    }
+}
+
+impl<T: Numeric> Sub<T> for HeapMatrix<T> {
+    type Output = Self;
+
+    fn sub(self, rhs: T) -> Self::Output {
+        let data: Vec<T> = self.data.iter().map(|x| *x - rhs).collect();
+
+        Self::new(&data, self.x_len, self.y_len)
+    }
+}
+
+impl<T: Numeric> Mul<T> for HeapMatrix<T> {
+    type Output = Self;
+
+    fn mul(self, rhs: T) -> Self::Output {
+        let data: Vec<T> = self.data.iter().map(|x| *x * rhs).collect();
+
+        Self::new(&data, self.x_len, self.y_len)
+    }
+}
+
 impl<T: Numeric> HeapMatrix<T> {
     /// Takes a &[T] which is converted to a 1-dimensional Vec<T> which is used
     /// by the HeapMatrix's inner data.
