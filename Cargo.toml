@@ -3,6 +3,9 @@ name = "rusty-matrix"
 version = "0.1.0"
 authors = ["STBoyden <sam@stboyden.com>"]
 edition = "2018"
+license = "MIT"
+description = "A generic matrix implementation"
+repository = "https://git.stboyden.com/STBoyden/rusty-matrix"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
