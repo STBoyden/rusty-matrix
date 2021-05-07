@@ -8,10 +8,21 @@ where
 {
     /// Gets the Matrix's inner data as a &[T]
     fn get_data(&self) -> &[T];
+    /// Gets the Matrix's inner data as a &mut [T]
+    fn get_data_mut(&mut self) -> &mut [T];
     /// Gets the Matrix's x length
     fn get_x_len(&self) -> usize;
     /// Gets the Matrix's y length
     fn get_y_len(&self) -> usize;
+
+    /// Gets the first item of the inner matrix data as a reference
+    fn first(&self) -> Option<&T> { self.get_data().first() }
+    /// Gets the last item of the inner matrix data as a reference
+    fn last(&self) -> Option<&T> { self.get_data().last() }
+    /// Gets the first item of the inner matrix data as a mutable reference
+    fn first_mut(&mut self) -> Option<&mut T> { self.get_data_mut().first_mut() }
+    /// Gets the last item of the inner matrix data as a matrix reference
+    fn last_mut(&mut self) -> Option<&mut T> { self.get_data_mut().last_mut() }
 
     /// Takes x and y coordinates and returns a T if the coordinates are within
     /// the bounds of the Matrix, panics otherwise.

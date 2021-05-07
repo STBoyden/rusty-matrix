@@ -357,6 +357,7 @@ impl<T: Numeric> Display for HeapMatrix<T> {
 
 impl<'a, T: 'a + Numeric> Matrix<'a, T> for HeapMatrix<T> {
     fn get_data(&self) -> &[T] { &self.data }
+    fn get_data_mut(&mut self) -> &mut [T] { &mut self.data }
     fn get_x_len(&self) -> usize { self.x_len }
     fn get_y_len(&self) -> usize { self.y_len }
 }
