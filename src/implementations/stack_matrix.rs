@@ -27,7 +27,7 @@ where
 {
     type Output = Self;
 
-    fn add(self, rhs: Self) -> Self::Output { self.mat_add(rhs).unwrap() }
+    fn add(self, rhs: Self) -> Self::Output { self.mat_add(&rhs).unwrap() }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Add<HeapMatrix<T>>
@@ -37,7 +37,7 @@ where
 {
     type Output = Result<Self>;
 
-    fn add(self, rhs: HeapMatrix<T>) -> Self::Output { self.mat_add(rhs) }
+    fn add(self, rhs: HeapMatrix<T>) -> Self::Output { self.mat_add(&rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Add<&Self> for StackMatrix<T, X, Y>
@@ -46,7 +46,7 @@ where
 {
     type Output = Self;
 
-    fn add(self, rhs: &Self) -> Self::Output { self.mat_add(*rhs).unwrap() }
+    fn add(self, rhs: &Self) -> Self::Output { self.mat_add(rhs).unwrap() }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Add<&HeapMatrix<T>>
@@ -56,7 +56,7 @@ where
 {
     type Output = Result<Self>;
 
-    fn add(self, rhs: &HeapMatrix<T>) -> Self::Output { self.mat_add(rhs.clone()) }
+    fn add(self, rhs: &HeapMatrix<T>) -> Self::Output { self.mat_add(&rhs.clone()) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Sub for StackMatrix<T, X, Y>
@@ -65,7 +65,7 @@ where
 {
     type Output = Self;
 
-    fn sub(self, rhs: Self) -> Self::Output { self.mat_sub(rhs).unwrap() }
+    fn sub(self, rhs: Self) -> Self::Output { self.mat_sub(&rhs).unwrap() }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Sub<HeapMatrix<T>>
@@ -75,7 +75,7 @@ where
 {
     type Output = Result<Self>;
 
-    fn sub(self, rhs: HeapMatrix<T>) -> Self::Output { self.mat_sub(rhs) }
+    fn sub(self, rhs: HeapMatrix<T>) -> Self::Output { self.mat_sub(&rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Sub<&Self> for StackMatrix<T, X, Y>
@@ -84,7 +84,7 @@ where
 {
     type Output = Self;
 
-    fn sub(self, rhs: &Self) -> Self::Output { self.mat_sub(*rhs).unwrap() }
+    fn sub(self, rhs: &Self) -> Self::Output { self.mat_sub(rhs).unwrap() }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Sub<&HeapMatrix<T>>
@@ -94,7 +94,7 @@ where
 {
     type Output = Result<Self>;
 
-    fn sub(self, rhs: &HeapMatrix<T>) -> Self::Output { self.mat_sub(rhs.clone()) }
+    fn sub(self, rhs: &HeapMatrix<T>) -> Self::Output { self.mat_sub(rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize, const Z: usize, const W: usize>
@@ -106,7 +106,7 @@ where
 {
     type Output = Result<StackMatrix<T, Z, Y>>;
 
-    fn mul(self, rhs: StackMatrix<T, Z, W>) -> Self::Output { self.mat_mul(rhs) }
+    fn mul(self, rhs: StackMatrix<T, Z, W>) -> Self::Output { self.mat_mul(&rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Mul<HeapMatrix<T>>
@@ -116,7 +116,7 @@ where
 {
     type Output = Result<HeapMatrix<T>>;
 
-    fn mul(self, rhs: HeapMatrix<T>) -> Self::Output { self.mat_mul(rhs) }
+    fn mul(self, rhs: HeapMatrix<T>) -> Self::Output { self.mat_mul(&rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize, const Z: usize, const W: usize>
@@ -128,7 +128,7 @@ where
 {
     type Output = Result<StackMatrix<T, Z, Y>>;
 
-    fn mul(self, rhs: &StackMatrix<T, Z, W>) -> Self::Output { self.mat_mul(*rhs) }
+    fn mul(self, rhs: &StackMatrix<T, Z, W>) -> Self::Output { self.mat_mul(rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Mul<&HeapMatrix<T>>
@@ -138,7 +138,7 @@ where
 {
     type Output = Result<HeapMatrix<T>>;
 
-    fn mul(self, rhs: &HeapMatrix<T>) -> Self::Output { self.mat_mul(rhs.clone()) }
+    fn mul(self, rhs: &HeapMatrix<T>) -> Self::Output { self.mat_mul(rhs) }
 }
 
 impl<T: Numeric, const X: usize, const Y: usize> Add<T> for StackMatrix<T, X, Y>

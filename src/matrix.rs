@@ -77,7 +77,7 @@ where
         out
     }
 
-    fn mat_add<Other: Matrix<'a, T>>(self, rhs: Other) -> Result<Self> {
+    fn mat_add<Other: Matrix<'a, T>>(&self, rhs: &Other) -> Result<Self> {
         if self.get_x_len() != rhs.get_x_len() || self.get_y_len() != rhs.get_y_len() {
             return Err(Error::NotEq);
         }
@@ -92,7 +92,7 @@ where
         Self::mat_new_1d(&data, self.get_x_len(), self.get_y_len())
     }
 
-    fn mat_sub<Other: Matrix<'a, T>>(self, rhs: Other) -> Result<Self> {
+    fn mat_sub<Other: Matrix<'a, T>>(&self, rhs: &Other) -> Result<Self> {
         if self.get_x_len() != rhs.get_x_len() || self.get_y_len() != rhs.get_y_len() {
             return Err(Error::NotEq);
         }
@@ -108,8 +108,8 @@ where
     }
 
     fn mat_mul<Other: Matrix<'a, T>, Res: Matrix<'a, T>>(
-        self,
-        rhs: Other,
+        &self,
+        rhs: &Other,
     ) -> Result<Res> {
         if self.get_x_len() != rhs.get_y_len() {
             return Err(Error::NotEq);
