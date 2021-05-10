@@ -10,3 +10,10 @@ repository = "https://git.stboyden.com/STBoyden/rusty-matrix"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "ops_benchmark"
+harness = false
