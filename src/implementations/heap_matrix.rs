@@ -2,10 +2,11 @@ use crate::{
     common::Numeric,
     error::{Error, Result},
     implementations::StackMatrix,
-    matrix::Matrix,
+    matrix::*,
 };
 use std::{
     fmt::{Debug, Display, Formatter},
+    marker::Sized,
     ops::*,
 };
 
@@ -18,40 +19,43 @@ pub struct HeapMatrix<T: Numeric> {
     pub(crate) y_len: usize,
 }
 
-impl<T: Numeric> Add for HeapMatrix<T> {
-    type Output = Result<Self>;
-
-    fn add(self, rhs: Self) -> Self::Output { self.mat_add(&rhs) }
-}
-
-impl<T: Numeric, const X: usize, const Y: usize> Add<StackMatrix<T, X, Y>>
-    for HeapMatrix<T>
+impl<'a, T: 'a + Numeric, Mat> Add<Mat> for HeapMatrix<T>
 where
-    [T; X * Y]: Sized,
+    Mat: Matrix<'a, T> + Sized,
 {
-    type Output = Result<Self>;
+    type Output = Self;
 
-    fn add(self, rhs: StackMatrix<T, X, Y>) -> Self::Output { self.mat_add(&rhs) }
+    fn add(self, rhs: Mat) -> Self::Output { self.mat_add(&rhs) }
 }
 
-impl<'a, T: Numeric> Add<&Self> for HeapMatrix<T> {
-    type Output = Result<Self>;
+// impl<T: Numeric, const X: usize, const Y: usize> Add<StackMatrix<T, X, Y>>
+//     for HeapMatrix<T>
+// where
+//     [T; X * Y]: Sized,
+// {
+//     type Output = Self;
 
-    fn add(self, rhs: &Self) -> Self::Output { self.mat_add(rhs) }
-}
+//     fn add(self, rhs: StackMatrix<T, X, Y>) -> Self::Output {
+// self.mat_add(&rhs) } }
 
-impl<T: Numeric, const X: usize, const Y: usize> Add<&StackMatrix<T, X, Y>>
-    for HeapMatrix<T>
-where
-    [T; X * Y]: Sized,
-{
-    type Output = Result<Self>;
+// impl<'a, T: Numeric> Add<&Self> for HeapMatrix<T> {
+//     type Output = Self;
 
-    fn add(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self.mat_add(rhs) }
-}
+//     fn add(self, rhs: &Self) -> Self::Output { self.mat_add(rhs) }
+// }
+
+// impl<T: Numeric, const X: usize, const Y: usize> Add<&StackMatrix<T, X, Y>>
+//     for HeapMatrix<T>
+// where
+//     [T; X * Y]: Sized,
+// {
+//     type Output = Self;
+
+//     fn add(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output {
+// self.mat_add(rhs) } }
 
 impl<T: Numeric> Sub for HeapMatrix<T> {
-    type Output = Result<Self>;
+    type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output { self.mat_sub(&rhs) }
 }
@@ -61,13 +65,13 @@ impl<T: Numeric, const X: usize, const Y: usize> Sub<StackMatrix<T, X, Y>>
 where
     [T; X * Y]: Sized,
 {
-    type Output = Result<Self>;
+    type Output = Self;
 
     fn sub(self, rhs: StackMatrix<T, X, Y>) -> Self::Output { self.mat_sub(&rhs) }
 }
 
 impl<T: Numeric> Sub<&Self> for HeapMatrix<T> {
-    type Output = Result<Self>;
+    type Output = Self;
 
     fn sub(self, rhs: &Self) -> Self::Output { self.mat_sub(rhs) }
 }
@@ -77,13 +81,13 @@ impl<T: Numeric, const X: usize, const Y: usize> Sub<&StackMatrix<T, X, Y>>
 where
     [T; X * Y]: Sized,
 {
-    type Output = Result<Self>;
+    type Output = Self;
 
     fn sub(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self.mat_sub(rhs) }
 }
 
 impl<T: Numeric> Mul for HeapMatrix<T> {
-    type Output = Result<HeapMatrix<T>>;
+    type Output = HeapMatrix<T>;
 
     fn mul(self, rhs: Self) -> Self::Output { self.mat_mul(&rhs) }
 }
@@ -93,13 +97,13 @@ impl<T: Numeric, const X: usize, const Y: usize> Mul<StackMatrix<T, X, Y>>
 where
     [T; X * Y]: Sized,
 {
-    type Output = Result<HeapMatrix<T>>;
+    type Output = HeapMatrix<T>;
 
     fn mul(self, rhs: StackMatrix<T, X, Y>) -> Self::Output { self.mat_mul(&rhs) }
 }
 
 impl<T: Numeric> Mul<&Self> for HeapMatrix<T> {
-    type Output = Result<Self>;
+    type Output = Self;
 
     fn mul(self, rhs: &Self) -> Self::Output { self.mat_mul(rhs) }
 }
@@ -109,20 +113,20 @@ impl<T: Numeric, const X: usize, const Y: usize> Mul<&StackMatrix<T, X, Y>>
 where
     [T; X * Y]: Sized,
 {
-    type Output = Result<Self>;
+    type Output = Self;
 
     fn mul(self, rhs: &StackMatrix<T, X, Y>) -> Self::Output { self.mat_mul(rhs) }
 }
 
-impl<T: Numeric> Add<T> for HeapMatrix<T> {
-    type Output = Self;
+// impl<T: Numeric> Add<T> for HeapMatrix<T> {
+//     type Output = Self;
 
-    fn add(self, rhs: T) -> Self::Output {
-        let data: Vec<T> = self.data.iter().map(|x| *x + rhs).collect();
+//     fn add(self, rhs: T) -> Self::Output {
+//         let data: Vec<T> = self.data.iter().map(|x| *x + rhs).collect();
 
-        Self::new(&data, self.x_len, self.y_len)
-    }
-}
+//         Self::new(&data, self.x_len, self.y_len)
+//     }
+// }
 
 impl<T: Numeric> Sub<T> for HeapMatrix<T> {
     type Output = Self;
@@ -243,21 +247,34 @@ impl<T: Numeric> Display for HeapMatrix<T> {
     }
 }
 
-impl<'a, T: 'a + Numeric> Matrix<'a, T> for HeapMatrix<T> {
-    fn get_data(&self) -> &[T] { &self.data }
-    fn get_data_mut(&mut self) -> &mut [T] { &mut self.data }
-    fn get_x_len(&self) -> usize { self.x_len }
-    fn get_y_len(&self) -> usize { self.y_len }
-
-    fn mat_new(data: &[&[T]]) -> Result<Self> {
+impl<'a, T: 'a + Numeric> MatrixAlloc<'a, T> for HeapMatrix<T> {
+    fn mat_new(data: &[&[T]]) -> Self {
         let data: Vec<Vec<T>> = data.iter().map(|x| x.to_vec()).collect();
 
-        Ok(Self::new_2d(data))
+        Self::new_2d(data)
     }
 
-    fn mat_new_1d(data: &[T], columns: usize, rows: usize) -> Result<Self> {
-        Ok(Self::new(data, columns, rows))
+    fn mat_new_1d(data: &[T], columns: usize, rows: usize) -> Self {
+        Self::new(data, columns, rows)
     }
 
-    fn mat_new_vec(data: Vec<Vec<T>>) -> Result<Self> { Ok(Self::new_2d(data)) }
+    fn mat_new_vec(data: Vec<Vec<T>>) -> Self { Self::new_2d(data) }
 }
+
+impl<'a, T: 'a + Numeric> MatrixRef<'a, T> for HeapMatrix<T> {
+    fn get_data(&self) -> &[T] { &self.data }
+    fn get_x_len(&self) -> usize { self.x_len }
+    fn get_y_len(&self) -> usize { self.y_len }
+}
+
+impl<'a, T: 'a + Numeric> MatrixRef<'a, T> for &HeapMatrix<T> {
+    fn get_data(&self) -> &[T] { &self.data }
+    fn get_x_len(&self) -> usize { self.x_len }
+    fn get_y_len(&self) -> usize { self.y_len }
+}
+
+impl<'a, T: 'a + Numeric> Matrix<'a, T> for HeapMatrix<T> {
+    fn get_data_mut(&mut self) -> &mut [T] { &mut self.data }
+}
+
+impl<'a, T: 'a + Numeric> MatrixOp<'a, T> for HeapMatrix<T> {}
