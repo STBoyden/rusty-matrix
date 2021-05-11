@@ -18,11 +18,21 @@ fn benchmark(c: &mut Criterion) {
     c.bench_function("stack - stack", |b| {
         b.iter(|| stack_mat_two - stack_mat_one)
     });
-    c.bench_function("stack + heap", |b| b.iter(|| stack_mat_one + &heap_mat_two));
-    c.bench_function("stack * heap", |b| b.iter(|| stack_mat_one * &heap_mat_two));
-    c.bench_function("stack - heap", |b| b.iter(|| stack_mat_two - &heap_mat_one));
-
-    c.bench_function("heap + heap", |b| b.iter(|| &heap_mat_one + &heap_mat_two));
+    c.bench_function("stack dot stack", |b| {
+        b.iter(|| stack_mat_one.dot_prod(&stack_mat_two))
+    });
+    c.bench_function("stack + heap", |b| {
+        b.iter(|| stack_mat_one + heap_mat_two.clone())
+    });
+    c.bench_function("stack * heap", |b| {
+        b.iter(|| stack_mat_one * heap_mat_two.clone())
+    });
+    c.bench_function("stack - heap", |b| {
+        b.iter(|| stack_mat_two - heap_mat_one.clone())
+    });
+    c.bench_function("stack dot heap", |b| {
+        b.iter(|| stack_mat_two.dot_prod(&heap_mat_one))
+    });
 }
 
 criterion_group!(benches, benchmark);

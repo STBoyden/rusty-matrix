@@ -10,6 +10,6 @@ fn main() {
         "{}\t\t+\n{}\t\t=\n{}",
         stack_mat,
         heap_mat.clone(),
-        (stack_mat + heap_mat).unwrap()
+        (stack_mat + heap_mat)
     );
 }
